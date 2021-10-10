@@ -1,0 +1,8 @@
+# 应用相关
+fiss:
+  datasource:
+    host: localhost
+    port: 3306
+    dbname: sample
+    username: root
+    password: root

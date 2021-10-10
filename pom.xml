@@ -1,0 +1,104 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.yinuo.fiss</groupId>
+    <artifactId>fiss</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>fiss-domain</module>
+        <module>fiss-server-mgt</module>
+        <module>fiss-spec-api</module>
+        <module>fiss-res-database</module>
+    </modules>
+    <packaging>pom</packaging>
+
+    <name>fiss</name>
+    <url>http://maven.apache.org</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <spring-boot.version>2.4.5</spring-boot.version>
+        <yinuo-base.version>1.0-SNAPSHOT</yinuo-base.version>
+        <yinuo-utils.version>1.0-SNAPSHOT</yinuo-utils.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 定义 spring boot 版本 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- 基础组件-->
+            <dependency>
+                <groupId>com.yinuo.base</groupId>
+                <artifactId>yinuo-base-dto</artifactId>
+                <version>${yinuo-base.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.base</groupId>
+                <artifactId>yinuo-base-starter</artifactId>
+                <version>${yinuo-base.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.base</groupId>
+                <artifactId>yinuo-base-domain</artifactId>
+                <version>${yinuo-base.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.base</groupId>
+                <artifactId>yinuo-base-jpa</artifactId>
+                <version>${yinuo-base.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.utils</groupId>
+                <artifactId>yinuo-utils</artifactId>
+                <version>${yinuo-utils.version}</version>
+            </dependency>
+
+            <!-- 项目模块依赖 -->
+            <dependency>
+                <groupId>com.yinuo.fiss</groupId>
+                <artifactId>fiss-spec-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.fiss</groupId>
+                <artifactId>fiss-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.fiss</groupId>
+                <artifactId>fiss-res-database</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.yinuo.fiss</groupId>
+                <artifactId>fiss-server-mgt</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>3.8.1</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>
