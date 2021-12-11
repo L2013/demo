@@ -1,4 +1,5 @@
 target/
+indexDir/
 test-output/
 !.mvn/wrapper/maven-wrapper.jar
 
