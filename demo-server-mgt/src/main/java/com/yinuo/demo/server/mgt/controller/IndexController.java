@@ -29,7 +29,7 @@ public class IndexController {
     @CatchAndLog
     public void download(HttpServletResponse response) throws IOException {
         setHeader(response);
-        extracted(response, new FileInputStream("D://绘图1.vsdx"));
+        renderFile(response, new FileInputStream("D://绘图1.vsdx"));
     }
 
     private void setHeader(HttpServletResponse response) throws UnsupportedEncodingException {
@@ -43,10 +43,10 @@ public class IndexController {
     @CatchAndLog
     public void downloadFromRemote(HttpServletResponse response) throws IOException {
         setHeader(response);
-        extracted(response, HttpUtil.createGet("http://localhost:8080/download").execute().bodyStream());
+        renderFile(response, HttpUtil.createGet("http://localhost:8080/download").execute().bodyStream());
     }
 
-    private void extracted(HttpServletResponse response, InputStream inputStream) throws IOException {
+    private void renderFile(HttpServletResponse response, InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int len;
         OutputStream out = response.getOutputStream();

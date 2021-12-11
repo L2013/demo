@@ -26,10 +26,6 @@
             <artifactId>yinuo-base-domain</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.yinuo.demo</groupId>
-            <artifactId>demo-spec-api</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.yinuo.utils</groupId>
             <artifactId>yinuo-utils</artifactId>
         </dependency>

@@ -8,8 +8,8 @@
     <modules>
         <module>demo-domain</module>
         <module>demo-server-mgt</module>
-        <module>demo-spec-api</module>
-        <module>demo-res-database</module>
+        <module>demo-api</module>
+        <module>demo-impl-dao</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -67,7 +67,7 @@
             <!-- 项目模块依赖 -->
             <dependency>
                 <groupId>com.yinuo.demo</groupId>
-                <artifactId>demo-spec-api</artifactId>
+                <artifactId>demo-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -77,7 +77,7 @@
             </dependency>
             <dependency>
                 <groupId>com.yinuo.demo</groupId>
-                <artifactId>demo-res-database</artifactId>
+                <artifactId>demo-impl-dao</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

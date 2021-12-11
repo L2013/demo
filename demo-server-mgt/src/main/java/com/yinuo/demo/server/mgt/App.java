@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
  * @author liang
  */
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.yinuo.demo.server.mgt", "com.yinuo.demo.domain", "com.yinuo.demo.res.database"})
+@ComponentScan(basePackages = {"com.yinuo.demo.server.mgt", "com.yinuo.demo.domain", "com.yinuo.demo.impl.dao"})
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class);

@@ -1,8 +1,12 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /demo-server-mgt
 spring:
   application:
     name: demo-server-mgt
   profiles:
-    active: dev
+    active: local
   datasource:
     primary:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
@@ -16,7 +20,7 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     encoding: UTF-8
-    mode: HTML5
+    mode: HTML
     cache: false
 logging:
   file:

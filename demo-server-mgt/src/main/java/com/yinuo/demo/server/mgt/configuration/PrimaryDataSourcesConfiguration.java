@@ -33,8 +33,8 @@ import java.util.Optional;
         transactionManagerRef = "txManagerPrimary",
         basePackages = {PrimaryDataSourcesConfiguration.BASE_PACKAGES_REPOS})
 public class PrimaryDataSourcesConfiguration {
-    static final String BASE_PACKAGES_ENTITIES = "com.yinuo.demo.res.database";
-    static final String BASE_PACKAGES_REPOS = "com.yinuo.demo.res.database";
+    static final String BASE_PACKAGES_ENTITIES = "com.yinuo.demo.impl.dao";
+    static final String BASE_PACKAGES_REPOS = "com.yinuo.demo.impl.dao";
 
     @Bean(name = "primaryDataSource")
     @Qualifier("primaryDataSource")

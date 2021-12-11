@@ -1,28 +1,28 @@
 package com.yinuo.demo.server.mgt.controller;
 
-import com.google.common.base.Joiner;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.sun.corba.se.spi.orb.StringPair;
 import com.yinuo.base.dto.SingleResponse;
 import com.yinuo.demo.server.mgt.consts.PathConstant;
-import org.apache.lucene.analysis.Analyzer;
+import com.yinuo.demo.server.mgt.dto.FileDto;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.cjk.CJKAnalyzer;
-import org.apache.lucene.analysis.core.KeywordAnalyzer;
-import org.apache.lucene.analysis.core.SimpleAnalyzer;
-import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.queryparser.classic.MultiFieldQueryParser;
+import org.apache.lucene.queryparser.classic.ParseException;
+import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.Query;
+import org.apache.lucene.search.ScoreDoc;
+import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.highlight.*;
+import org.apache.lucene.store.Directory;
+import org.apache.lucene.store.FSDirectory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
-import java.io.StringReader;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * @author liang
@@ -31,45 +31,49 @@ import java.util.stream.Collectors;
 public class LuceneController {
 
     @RequestMapping(PathConstant.LUCENE)
-    public SingleResponse<Map<String, List<StringPair>>> lucene() {
-        String st1 = "中华人民共和国简称中国， 是一个拥有13亿人的国家";
-        String st2 = "Dogs can not archive a place, eyes can reach;";
-        List<StringPair> list1 = getAnalyseResult(st1);
-        List<StringPair> list2 = getAnalyseResult(st2);
-        // appendTokenToStringBuilder(sb, st, new StopAnalyzer());
-        ImmutableMap<String, List<StringPair>> map = ImmutableMap.of("list1", list1, "list2", list2);
-        return SingleResponse.of(map);
+    public SingleResponse<List<FileDto>> getTopDoc(String key) throws IOException, ParseException {
+        //TODO 希望做一个基于lucence的搜索功能
+        return null;
     }
 
-    private List<StringPair> getAnalyseResult(String st) {
-        List<Analyzer> analyzers = ImmutableList.of(
-                new StandardAnalyzer(),
-                new WhitespaceAnalyzer(),
-                new SimpleAnalyzer(),
-                new CJKAnalyzer(),
-                new KeywordAnalyzer(),
-                new IKAnalyzer(true)
-        );
-        return analyzers.stream()
-                .map(t -> new StringPair(t.getClass().getName(), Joiner.on("|").join(analyze(t, st))))
-                .collect(Collectors.toList());
-    }
+    public static void main(String[] args) throws IOException, ParseException, InvalidTokenOffsetsException {
+        String key = "科学";
+        List<FileDto> hits = Lists.newArrayList();
+        // 检索域
+        String[] fields = {"title", "content"};
+        // 索引查询器
+        Directory directory = FSDirectory.open(Paths.get(System.getProperty("user.dir") + "/indexDir"));
+        IndexSearcher indexSearcher = new IndexSearcher(DirectoryReader.open(directory));
 
-    private List<String> analyze(Analyzer analyzer, String sentence) {
-        List<String> result = new ArrayList<>();
-        try {
-            StringReader reader = new StringReader(sentence);
-            TokenStream tokenStream = analyzer.tokenStream(sentence, reader);
-            tokenStream.reset();
-            CharTermAttribute charTermAttribute = tokenStream.getAttribute(CharTermAttribute.class);
-            while (tokenStream.incrementToken()) {
-                result.add(charTermAttribute.toString());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            analyzer.close();
+        // 分词器
+        IKAnalyzer analyzer = new IKAnalyzer(true);
+
+        // 构建查询
+        Query query = new MultiFieldQueryParser(fields, analyzer).parse(key);
+
+        // 查询
+        TopDocs topDocs = indexSearcher.search(query, 10);
+        QueryScorer queryScorer = new QueryScorer(query, fields[0]);
+        Highlighter highlighter = new Highlighter(new SimpleHTMLFormatter("<span style='color:red'>", "</span>"), queryScorer);
+        for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+            Document doc = indexSearcher.doc(scoreDoc.doc);
+            String title = doc.get("title");
+            String content = doc.get("content");
+            Fragmenter fragmenter = new SimpleSpanFragmenter(queryScorer);
+            highlighter.setTextFragmenter(fragmenter);
+            TokenStream tokenStream = TokenSources.getAnyTokenStream(indexSearcher.getIndexReader(), scoreDoc.doc, fields[0], analyzer);
+            String hlTitle = highlighter.getBestFragment(tokenStream, title);
+            tokenStream = TokenSources.getAnyTokenStream(indexSearcher.getIndexReader(), scoreDoc.doc, fields[1], analyzer);
+            String hlContent = highlighter.getBestFragment(tokenStream, content);
+            FileDto fileDto = new FileDto(hlTitle, hlContent);
+            hits.add(fileDto);
         }
-        return result;
+        directory.close();
+        DirectoryReader.open(directory).close();
+
+        hits.stream().forEach(t -> {
+            System.out.println(t.getTitle());
+            System.out.println(t.getContent());
+        });
     }
 }
