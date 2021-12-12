@@ -16,7 +16,7 @@ import org.apache.lucene.search.TopDocs;
 import org.apache.lucene.search.highlight.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.wltea.analyzer.lucene.IKAnalyzer;
 
@@ -30,7 +30,7 @@ import java.util.List;
 @RestController
 public class LuceneController {
 
-    @RequestMapping(PathConstant.LUCENE)
+    @GetMapping(PathConstant.LUCENE)
     public SingleResponse<List<FileDto>> getTopDoc(String key) throws IOException, ParseException {
         //TODO 希望做一个基于lucence的搜索功能
         return null;
