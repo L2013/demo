@@ -24,6 +24,11 @@ public class UserDaoImpl extends BaseDaoImpl<UserDO, UserRepo> implements UserDa
     private UserRepo repo;
 
     @Override
+    public long count() {
+        return repo.count();
+    }
+
+    @Override
     public List<User> find(User user) {
         return repo.findAll(getCriteria(BeanUtil.toBean(user, UserDO.class))).stream()
                 .map(t -> BeanUtil.toBean(t, User.class)).collect(Collectors.toList());

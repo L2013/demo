@@ -1,5 +1,6 @@
 package com.yinuo.demo.server.mgt;
 
+import com.yinuo.demo.server.mgt.utils.DateKit;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
@@ -19,5 +20,7 @@ import org.springframework.context.annotation.ComponentScan;
 public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class);
+        System.out.println(DateKit.today());
+        DateKit.reportUserCount();
     }
 }

@@ -32,3 +32,4 @@ logging:
 mybatis:
   typeAliasesPackage: com.yinuo.demo.res.database.user
   mapperLocations: classpath:mapper/*.xml
+today: 2021-10-10
